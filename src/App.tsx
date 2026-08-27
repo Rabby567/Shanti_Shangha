@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { AdminDashboard } from "./components/AdminDashboard";
 import { About } from "./components/About";
 import { AboutPage } from "./components/AboutPage";
 import { Activities } from "./components/Activities";
@@ -110,12 +111,21 @@ function App() {
   }, []);
 
   const activityRouteMatch = route.match(/^#\/activity\/(.+)$/);
+  const isAdminPage = route === "#/admin";
   const isAboutPage = route === "#/about";
   const isActivitiesPage = route === "#/activities";
   const isGalleryPage = route === "#/gallery";
   const activityNumber = activityRouteMatch
     ? decodeURIComponent(activityRouteMatch[1])
     : "";
+
+  if (isAdminPage) {
+    return (
+      <AdminDashboard
+        onBackToWebsite={goHome}
+      />
+    );
+  }
 
   return (
     <div className="site">

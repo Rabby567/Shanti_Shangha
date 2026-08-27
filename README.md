@@ -26,3 +26,11 @@ npm run build
 - Blood-service UI keeps a separate red accent to preserve blood-related visual meaning.
 - About-section statistics use viewport-triggered count-up animation.
 - Image files in `public/images/` are demo placeholders and can be replaced later.
+
+
+## Admin Dashboard
+
+The first admin dashboard foundation is available at `#/admin`.
+This stage is UI/navigation only. Authentication and Supabase database/storage
+will be connected in the next step; do not treat the current preview route as
+a secured admin area yet.
