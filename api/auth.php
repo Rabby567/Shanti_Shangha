@@ -151,6 +151,7 @@ try {
 
         $update = $pdo->prepare('UPDATE admins SET last_login_at = NOW() WHERE id = :id');
         $update->execute(['id' => $admin['id']]);
+        log_admin_activity($pdo, 'Auth', 'login', 'Admin dashboard-এ login করেছেন।', (int)$admin['id']);
 
         send_json([
             'success' => true,
@@ -210,6 +211,7 @@ try {
         $fresh->execute(['id'=>$adminId]);
         $admin = $fresh->fetch();
 
+        log_admin_activity($pdo, 'Auth', 'profile', 'নিজের admin profile আপডেট করেছেন।', $adminId);
         send_json(['success'=>true,'message'=>'Profile সফলভাবে আপডেট হয়েছে।','admin'=>auth_public_admin($admin)]);
     }
 

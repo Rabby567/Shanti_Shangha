@@ -95,9 +95,11 @@ try {
             'is_active' => $isActive ? 1 : 0,
         ]);
 
+        $newAdminId = (int) $pdo->lastInsertId();
+        log_admin_activity($pdo, 'Admins', 'create', 'নতুন admin account “' . $name . '” তৈরি করা হয়েছে।', $newAdminId);
         send_json([
             'success' => true,
-            'message' => 'নতুন admin সফলভাবে তৈরি হয়েছে।',
+            'message' => 'নতুন admin সফলভাবে তৈরি হয়েছে.',
             'id' => (int) $pdo->lastInsertId(),
         ], 201);
     }
@@ -183,6 +185,7 @@ try {
             $_SESSION['admin_role'] = $role;
         }
 
+        log_admin_activity($pdo, 'Admins', 'update', 'Admin “' . $name . '” এর access/information আপডেট করা হয়েছে।', $id);
         send_json(['success' => true, 'message' => 'Admin information আপডেট হয়েছে।']);
     }
 
@@ -214,6 +217,7 @@ try {
 
         delete_uploaded_file($existing['avatar_path'] ?? null);
 
+        log_admin_activity($pdo, 'Admins', 'delete', 'একটি admin account মুছে ফেলা হয়েছে।', $id);
         send_json(['success' => true, 'message' => 'Admin account মুছে ফেলা হয়েছে।']);
     }
 

@@ -8,6 +8,10 @@ import { BloodDonorsManagement } from "./BloodDonorsManagement";
 import { MemberApplicationsManagement } from "./MemberApplicationsManagement";
 import { SettingsManagement } from "./SettingsManagement";
 import { DonationManagement } from "./DonationManagement";
+import { AdminManagement } from "./AdminManagement";
+import { ActivityLogManagement } from "./ActivityLogManagement";
+import { NotificationsManagement } from "./NotificationsManagement";
+import { NotificationCenter } from "./NotificationCenter";
 import type { AdminUser } from "../types";
 import { mediaUrl } from "../media";
 
@@ -26,6 +30,9 @@ type AdminSection =
   | "blood-donors"
   | "members"
   | "donation"
+  | "notifications"
+  | "activity"
+  | "admins"
   | "settings";
 
 const menuGroups = [
@@ -51,6 +58,14 @@ const menuGroups = [
       { id: "blood-donors", label: "রক্তদাতা তালিকা", icon: "♢" },
       { id: "members", label: "সদস্য আবেদন", icon: "♙" },
       { id: "donation", label: "অনুদান", icon: "৳" },
+    ],
+  },
+  {
+    label: "পরিচালনা",
+    items: [
+      { id: "notifications", label: "নোটিফিকেশন", icon: "🔔" },
+      { id: "activity", label: "Activity", icon: "◷" },
+      { id: "admins", label: "Admin Management", icon: "♙" },
     ],
   },
 ];
@@ -108,6 +123,9 @@ const sectionTitles: Record<AdminSection, { title: string; description: string }
     title: "অনুদান",
     description: "অনুদানের মাধ্যম, form এবং জমা হওয়া donation পরিচালনা করুন।",
   },
+  notifications: { title: "নোটিফিকেশন", description: "গুরুত্বপূর্ণ system এবং user submission alert দেখুন।" },
+  activity: { title: "Activity", description: "কোন admin কী action করেছে তার audit trail দেখুন।" },
+  admins: { title: "Admin Management", description: "Super Admin হিসেবে admin account ও access পরিচালনা করুন।" },
   settings: {
     title: "সেটিংস",
     description: "Admin account এবং dashboard-এর configuration পরিচালনা করুন।",
@@ -216,7 +234,7 @@ export function AdminDashboard({ onBackToWebsite, onLogout }: AdminDashboardProp
             <div className="admin-menu-group" key={group.label}>
               <span className="admin-menu-label">{group.label}</span>
 
-              {group.items.map((item) => (
+              {group.items.filter((item) => !(group.label === "পরিচালনা" && currentAdmin?.role !== "super_admin" && item.id === "admins")).map((item) => (
                 <button
                   key={item.id}
                   type="button"
@@ -299,7 +317,9 @@ export function AdminDashboard({ onBackToWebsite, onLogout }: AdminDashboardProp
             <strong>{active.title}</strong>
           </div>
 
-          <div className="admin-profile">
+          <div className="admin-topbar-actions">
+            <NotificationCenter />
+            <div className="admin-profile">
             {currentAdmin?.avatar_path ? (
               <img className="admin-avatar admin-avatar-image" src={mediaUrl(currentAdmin.avatar_path)} alt={currentAdmin.name} />
             ) : (
@@ -311,6 +331,7 @@ export function AdminDashboard({ onBackToWebsite, onLogout }: AdminDashboardProp
               <strong>{currentAdmin?.name || "Administrator"}</strong>
               <small>{currentAdmin?.role === "super_admin" ? "Super Admin" : "Admin"}</small>
             </div>
+          </div>
           </div>
         </header>
 
@@ -388,6 +409,18 @@ export function AdminDashboard({ onBackToWebsite, onLogout }: AdminDashboardProp
                       <strong>রক্তের আবেদন</strong>
                       <small>নতুন আবেদন পর্যালোচনা</small>
                     </button>
+
+                    <button type="button" onClick={() => selectSection("notifications")}>
+                      <span>🔔</span>
+                      <strong>নোটিফিকেশন</strong>
+                      <small>নতুন alert দেখুন</small>
+                    </button>
+
+                    <button type="button" onClick={() => selectSection("activity")}>
+                      <span>◷</span>
+                      <strong>Admin Activity</strong>
+                      <small>কে কী করছে দেখুন</small>
+                    </button>
                   </div>
                 </article>
 
@@ -421,6 +454,12 @@ export function AdminDashboard({ onBackToWebsite, onLogout }: AdminDashboardProp
             <MemberApplicationsManagement />
           ) : activeSection === "donation" ? (
             <DonationManagement />
+          ) : activeSection === "notifications" ? (
+            <NotificationsManagement />
+          ) : activeSection === "activity" ? (
+            <ActivityLogManagement />
+          ) : activeSection === "admins" ? (
+            <AdminManagement />
           ) : activeSection === "settings" ? (
             <SettingsManagement />
           ) : (
@@ -439,6 +478,7 @@ export function AdminDashboard({ onBackToWebsite, onLogout }: AdminDashboardProp
           )}
         </main>
       </div>
+      <NotificationCenter floating />
     </div>
   );
 }

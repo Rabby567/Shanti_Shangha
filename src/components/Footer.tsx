@@ -61,6 +61,16 @@ export function Footer({ onNavigate, siteSettings }: FooterProps) {
             ))}
         </div>
 
+        {/* Contact and social links */}
+        <div>
+          <h4>যোগাযোগ ও সোশ্যাল</h4>
+          {siteSettings?.contact_email && <a className="footer-social-link" href={`mailto:${siteSettings.contact_email}`}>✉ ইমেইল</a>}
+          {siteSettings?.contact_phone && <a className="footer-social-link" href={`tel:${siteSettings.contact_phone}`}>☎ কল করুন</a>}
+          {siteSettings?.facebook_url && <a className="footer-social-link" href={siteSettings.facebook_url} target="_blank" rel="noreferrer">f Facebook</a>}
+          {siteSettings?.youtube_url && <a className="footer-social-link" href={siteSettings.youtube_url} target="_blank" rel="noreferrer">▶ YouTube</a>}
+          {siteSettings?.instagram_url && <a className="footer-social-link" href={siteSettings.instagram_url} target="_blank" rel="noreferrer">◎ Instagram</a>}
+        </div>
+
         {/* Blood-service shortcuts */}
         <div>
           <h4>রক্ত সেবা</h4>
@@ -79,6 +89,21 @@ export function Footer({ onNavigate, siteSettings }: FooterProps) {
           >
             উপরে যান ↑
           </button>
+        </div>
+
+        {/* Location map — intentionally kept after the Blood Service column */}
+        <div className="footer-location">
+          <h4>লোকেশন</h4>
+          {(siteSettings?.map_query || siteSettings?.address) ? (
+            <iframe
+              className="footer-map"
+              title="শান্তি সংঘ লোকেশন ম্যাপ"
+              loading="lazy"
+              src={siteSettings?.map_embed_url || `https://www.google.com/maps?q=${encodeURIComponent(siteSettings?.map_query || siteSettings?.address || "")}&z=${siteSettings?.map_zoom || 15}&output=embed`}
+            />
+          ) : (
+            <div className="footer-map-empty">Admin Dashboard → Settings → Location Map থেকে location সেট করুন।</div>
+          )}
         </div>
       </div>
 

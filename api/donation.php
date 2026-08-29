@@ -150,6 +150,7 @@ try {
         $phone = (string)($clean['phone'] ?? $clean['mobile'] ?? '');
         $stmt = $pdo->prepare('INSERT INTO donation_submissions (donor_name, phone, amount, payment_method, transaction_id, form_data, status) VALUES (?,?,?,?,?,?,?)');
         $stmt->execute([$name ?: null, $phone ?: null, $amount, $method ?: null, (string)($clean['transaction_id'] ?? ''), json_encode($clean, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES), 'pending']);
+        $donationId=(int)$pdo->lastInsertId(); if(get_site_setting('notify_donation','1')==='1') create_notification($pdo,'donation','নতুন অনুদানের তথ্য',($name?:'একজন দাতা').' অনুদানের তথ্য জমা দিয়েছেন।','donation',$donationId);
         send_json(['success'=>true,'message'=>'আপনার অনুদানের তথ্য সফলভাবে জমা হয়েছে। ধন্যবাদ।'],201);
     }
 
@@ -178,6 +179,7 @@ try {
         ];
         $stmt = $pdo->prepare('INSERT INTO site_settings (setting_key,setting_value) VALUES ("donation_config",?) ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value)');
         $stmt->execute([json_encode($config, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)]);
+        log_admin_activity($pdo,'Donation','save-config','Donation configuration আপডেট করা হয়েছে।');
         send_json(['success'=>true,'message'=>'Donation settings সফলভাবে সংরক্ষণ হয়েছে।','config'=>public_config($pdo)]);
     }
 
@@ -197,12 +199,14 @@ try {
         $p=read_json_payload(); $id=(int)($p['id']??0); $status=(string)($p['status']??'');
         if (!in_array($status,['pending','confirmed','cancelled'],true)) send_json(['success'=>false,'message'=>'Invalid status.'],422);
         $q=$pdo->prepare('UPDATE donation_submissions SET status=? WHERE id=?');$q->execute([$status,$id]);
+        log_admin_activity($pdo,'Donation','status','Donation status '.$status.' করা হয়েছে।',$id);
         send_json(['success'=>true,'message'=>'Donation status আপডেট হয়েছে।']);
     }
 
     if ($action === 'delete-submission' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $p=read_json_payload(); $id=(int)($p['id']??0);
         $q=$pdo->prepare('DELETE FROM donation_submissions WHERE id=?');$q->execute([$id]);
+        log_admin_activity($pdo,'Donation','delete','Donation record মুছে ফেলা হয়েছে।',$id);
         send_json(['success'=>true,'message'=>'Donation record মুছে ফেলা হয়েছে।']);
     }
 

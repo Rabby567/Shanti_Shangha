@@ -8,6 +8,7 @@ import { ActivitiesPage } from "./components/ActivitiesPage";
 import { ActivityDetailPage } from "./components/ActivityDetailPage";
 import { BloodService } from "./components/BloodService";
 import { DonationSection } from "./components/DonationSection";
+import { ContactSection } from "./components/ContactSection";
 import { Footer } from "./components/Footer";
 import { Gallery } from "./components/Gallery";
 import { GalleryPage } from "./components/GalleryPage";
@@ -235,6 +236,7 @@ function App() {
           <MemberRegistration onSubmit={showToast} />
           {homepageSettings.blood_enabled && <BloodService onSubmit={showToast} />}
           <DonationSection onSubmit={showToast} />
+          <ContactSection siteSettings={siteSettings} />
         </main>
       )}
 
@@ -246,10 +248,11 @@ function App() {
         </div>
       )}
 
-      {/* Temporary floating help control; functionality can be added later. */}
-      <button className="float-help" type="button" aria-label="সহায়তা">
-        💬
-      </button>
+      {siteSettings.contact_phone && (
+        <a className="float-call" href={`tel:${siteSettings.contact_phone}`} aria-label={`কল করুন ${siteSettings.contact_phone}`} title={`কল করুন: ${siteSettings.contact_phone}`}>
+          ☎
+        </a>
+      )}
     </div>
   );
 }

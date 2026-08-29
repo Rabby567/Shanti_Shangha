@@ -269,6 +269,8 @@ export function SettingsManagement() {
     ["system", "🗄️ System"],
     ["uploads", "🖼️ Uploads"],
     ["notifications", "🔔 Notifications"],
+    ["contact-social", "☎ Contact & Social"],
+    ["location", "📍 Location Map"],
     ["account", "👤 My Account"],
   ];
 
@@ -318,8 +320,14 @@ export function SettingsManagement() {
               <label className="full">Address
                 <textarea rows={3} value={settings.site.address} onChange={(e) => updateGroup("site", { address: e.target.value })} />
               </label>
-              <label className="full">Facebook URL
+              <label>Facebook URL
                 <input type="url" value={settings.site.facebook_url} onChange={(e) => updateGroup("site", { facebook_url: e.target.value })} placeholder="https://facebook.com/..." />
+              </label>
+              <label>YouTube URL
+                <input type="url" value={settings.site.youtube_url} onChange={(e) => updateGroup("site", { youtube_url: e.target.value })} placeholder="https://youtube.com/..." />
+              </label>
+              <label>Instagram URL
+                <input type="url" value={settings.site.instagram_url} onChange={(e) => updateGroup("site", { instagram_url: e.target.value })} placeholder="https://instagram.com/..." />
               </label>
               <label>Website Status
                 <select value={settings.site.status} onChange={(e) => updateGroup("site", { status: e.target.value as "active" | "maintenance" })}>
@@ -342,6 +350,8 @@ export function SettingsManagement() {
                 contact_email: settings.site.contact_email,
                 address: settings.site.address,
                 facebook_url: settings.site.facebook_url,
+                youtube_url: settings.site.youtube_url,
+                instagram_url: settings.site.instagram_url,
                 status: settings.site.status,
               }, "site")}>
                 {saving === "site" ? "সংরক্ষণ হচ্ছে..." : "Website Settings Save করুন"}
@@ -523,6 +533,131 @@ export function SettingsManagement() {
         </div>
       )}
 
+      {activeTab === "contact-social" && (
+        <div className="admin-settings-stack">
+          <div className="admin-form-card">
+            <div className="admin-form-section-heading">
+              <span className="admin-kicker">CONTACT CENTER</span>
+              <h2>ইমেইল ও কল সেটিংস</h2>
+              <p>ওয়েবসাইটের contact form কোন ইমেইলে যাবে এবং Call Us button কোন নম্বরে কল করবে তা এখান থেকে নিয়ন্ত্রণ করুন।</p>
+            </div>
+
+            <div className="admin-form-grid">
+              <label>Mail recipient / Gmail *
+                <input type="email" value={settings.site.contact_email} onChange={(e) => updateGroup("site", { contact_email: e.target.value })} placeholder="yourgmail@gmail.com" />
+                <small className="admin-field-help">Contact form submit হলে এই ঠিকানায় মেইল যাবে।</small>
+              </label>
+              <label>Call Us phone number *
+                <input type="tel" value={settings.site.contact_phone} onChange={(e) => updateGroup("site", { contact_phone: e.target.value })} placeholder="01XXXXXXXXX" />
+                <small className="admin-field-help">Header এবং floating Call button এই নম্বর ব্যবহার করবে।</small>
+              </label>
+            </div>
+
+            <div className="admin-form-actions">
+              <button className="admin-primary-button" type="button" disabled={!isSuperAdmin || saving === "contact-social"} onClick={() => saveGroup("save-contact-social", {
+                contact_phone: settings.site.contact_phone,
+                contact_email: settings.site.contact_email,
+                facebook_url: settings.site.facebook_url,
+                youtube_url: settings.site.youtube_url,
+                instagram_url: settings.site.instagram_url,
+              }, "contact-social")}>
+                {saving === "contact-social" ? "সংরক্ষণ হচ্ছে..." : "Contact Settings Save করুন"}
+              </button>
+            </div>
+          </div>
+
+          <div className="admin-form-card">
+            <div className="admin-form-section-heading">
+              <span className="admin-kicker">GMAIL SMTP</span>
+              <h2>Contact Form Mail Delivery</h2>
+              <p>localhost/XAMPP থেকে Gmail-এ সরাসরি mail পাঠাতে SMTP ব্যবহার করুন। Gmail account-এর জন্য App Password ব্যবহার করুন; মূল Gmail password দেবেন না।</p>
+            </div>
+            <div className="admin-toggle-grid">
+              <Toggle label="Gmail SMTP চালু করুন" description="চালু থাকলে Contact Form SMTP দিয়ে mail পাঠাবে।" checked={settings.smtp.enabled} onChange={(v) => updateGroup("smtp", { enabled: v })} />
+            </div>
+            <div className="admin-form-grid">
+              <label>SMTP Gmail *
+                <input type="email" value={settings.smtp.username} onChange={(e) => updateGroup("smtp", { username: e.target.value })} placeholder="yourgmail@gmail.com" />
+              </label>
+              <label>Gmail App Password *
+                <input type="password" value={settings.smtp.password} onChange={(e) => updateGroup("smtp", { password: e.target.value })} placeholder="বর্তমান password রাখতে খালি রাখুন" autoComplete="new-password" />
+                <small className="admin-field-help">Google Account → Security → 2-Step Verification → App passwords থেকে তৈরি করুন।</small>
+              </label>
+              <label>SMTP Host
+                <input value={settings.smtp.host} onChange={(e) => updateGroup("smtp", { host: e.target.value })} />
+              </label>
+              <label>SMTP Port
+                <input type="number" min={1} max={65535} value={settings.smtp.port} onChange={(e) => updateGroup("smtp", { port: Number(e.target.value) || 587 })} />
+              </label>
+              <label>Encryption
+                <select value={settings.smtp.encryption} onChange={(e) => updateGroup("smtp", { encryption: e.target.value as "tls" | "ssl" | "none" })}>
+                  <option value="tls">TLS / STARTTLS (587)</option>
+                  <option value="ssl">SSL (465)</option>
+                  <option value="none">None</option>
+                </select>
+              </label>
+              <label>Sender Name
+                <input value={settings.smtp.from_name} onChange={(e) => updateGroup("smtp", { from_name: e.target.value })} placeholder="শান্তি সংঘ Website" />
+              </label>
+            </div>
+            <div className="admin-form-actions">
+              <button className="admin-primary-button" type="button" disabled={!isSuperAdmin || saving === "smtp"} onClick={() => saveGroup("save-smtp", { ...settings.smtp }, "smtp")}>
+                {saving === "smtp" ? "সংরক্ষণ হচ্ছে..." : "Gmail SMTP Save করুন"}
+              </button>
+              <button className="admin-secondary-button" type="button" disabled={!isSuperAdmin || saving === "smtp-test"} onClick={async () => {
+                setSaving("smtp-test"); setNotice(""); setError("");
+                try {
+                  const response = await fetch("/api/settings.php?action=test-smtp", { method: "POST", credentials: "include", headers: { "Content-Type": "application/json" }, body: "{}" });
+                  const data = await response.json();
+                  if (!response.ok || !data.success) throw new Error(data.message || "SMTP test failed");
+                  flash(data.message || "Test email পাঠানো হয়েছে।");
+                } catch (e) { setError(e instanceof Error ? e.message : "SMTP test failed"); }
+                finally { setSaving(null); }
+              }}>
+                {saving === "smtp-test" ? "Test হচ্ছে..." : "Test Email পাঠান"}
+              </button>
+            </div>
+          </div>
+
+          <div className="admin-form-card">
+            <div className="admin-form-section-heading">
+              <span className="admin-kicker">SOCIAL MEDIA MANAGER</span>
+              <h2>Footer Social Links</h2>
+              <p>Footer-এ দেখানো social media link যোগ, edit অথবা delete করুন। Delete করতে URL খালি করে Save করুন।</p>
+            </div>
+
+            <div className="social-links-admin-grid">
+              {[
+                ["Facebook", "facebook_url", settings.site.facebook_url, "https://facebook.com/yourpage"],
+                ["YouTube", "youtube_url", settings.site.youtube_url, "https://youtube.com/@yourchannel"],
+                ["Instagram", "instagram_url", settings.site.instagram_url, "https://instagram.com/yourpage"],
+              ].map(([label, key, value, placeholder]) => (
+                <div className="social-link-admin-card" key={key}>
+                  <div className="social-link-admin-head">
+                    <div><span className="social-link-admin-icon">{label === "Facebook" ? "f" : label === "YouTube" ? "▶" : "◎"}</span><strong>{label}</strong></div>
+                    <button type="button" className="admin-danger-mini" disabled={!isSuperAdmin || !value} onClick={() => updateGroup("site", { [key]: "" } as Partial<SettingsBundle["site"]>)} title={`${label} link delete করুন`}>Delete</button>
+                  </div>
+                  <input type="url" value={value} onChange={(e) => updateGroup("site", { [key]: e.target.value } as Partial<SettingsBundle["site"]>)} placeholder={placeholder} />
+                  <small>{value ? "Footer-এ active" : "এখনো link যোগ করা হয়নি"}</small>
+                </div>
+              ))}
+            </div>
+
+            <div className="admin-form-actions">
+              <button className="admin-primary-button" type="button" disabled={!isSuperAdmin || saving === "contact-social-links"} onClick={() => saveGroup("save-contact-social", {
+                contact_phone: settings.site.contact_phone,
+                contact_email: settings.site.contact_email,
+                facebook_url: settings.site.facebook_url,
+                youtube_url: settings.site.youtube_url,
+                instagram_url: settings.site.instagram_url,
+              }, "contact-social-links")}>
+                {saving === "contact-social-links" ? "সংরক্ষণ হচ্ছে..." : "Social Links Save করুন"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {activeTab === "notifications" && (
         <div className="admin-settings-stack">
           <div className="admin-form-card">
@@ -535,6 +670,7 @@ export function SettingsManagement() {
               <Toggle label="New blood request" description="নতুন রক্তের আবেদন এলে notification চালু থাকবে।" checked={settings.notifications.blood_request} onChange={(v) => updateGroup("notifications", { blood_request: v })} />
               <Toggle label="New member application" description="নতুন সদস্য আবেদন এলে notification চালু থাকবে।" checked={settings.notifications.member_application} onChange={(v) => updateGroup("notifications", { member_application: v })} />
               <Toggle label="New activity" description="নতুন কার্যক্রম publish হলে notification চালু থাকবে।" checked={settings.notifications.activity} onChange={(v) => updateGroup("notifications", { activity: v })} />
+              <Toggle label="New donation" description="নতুন অনুদানের তথ্য এলে notification চালু থাকবে।" checked={settings.notifications.donation} onChange={(v) => updateGroup("notifications", { donation: v })} />
               <Toggle label="Email notification" description="Email delivery pipeline-এর global switch।" checked={settings.notifications.email_enabled} onChange={(v) => updateGroup("notifications", { email_enabled: v })} />
             </div>
             <div className="admin-form-actions">
@@ -542,9 +678,43 @@ export function SettingsManagement() {
                 blood_request: settings.notifications.blood_request,
                 member_application: settings.notifications.member_application,
                 activity: settings.notifications.activity,
+                donation: settings.notifications.donation,
                 email_enabled: settings.notifications.email_enabled,
               }, "notifications")}>
                 {saving === "notifications" ? "সংরক্ষণ হচ্ছে..." : "Notification Settings Save করুন"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeTab === "location" && (
+        <div className="admin-settings-stack">
+          <div className="admin-form-card">
+            <div className="admin-form-section-heading">
+              <span className="admin-kicker">LOCATION MAP</span>
+              <h2>ওয়েবসাইটের Location Map</h2>
+              <p>Footer-এর ডান পাশে যে map দেখাবে, তার location এখানে সেট করুন। Address লিখলে সেটিও Contact section-এ দেখানো হবে।</p>
+            </div>
+            <div className="admin-form-grid">
+              <label className="full">Location / Google Maps Search *
+                <input value={settings.site.map_query} onChange={(e) => updateGroup("site", { map_query: e.target.value })} placeholder="যেমন: Pirojpur, Bangladesh অথবা পূর্ণ ঠিকানা" />
+                <small className="admin-field-help">সঠিক location পেতে Google Maps-এর নাম/ঠিকানা এখানে লিখুন। চাইলে latitude, longitude-ও দিতে পারেন।</small>
+              </label>
+              <label className="full">Address / ঠিকানা
+                <textarea rows={3} value={settings.site.address} onChange={(e) => updateGroup("site", { address: e.target.value })} placeholder="অফিস/সংগঠনের পূর্ণ ঠিকানা" />
+              </label>
+              <label className="full">Google Maps Embed URL / iframe
+                <textarea rows={4} value={settings.site.map_embed_url} onChange={(e) => updateGroup("site", { map_embed_url: e.target.value })} placeholder="Google Maps → Share → Embed a map থেকে iframe-এর src URL অথবা পুরো iframe দিন" />
+                <small className="admin-field-help">Google Maps-এর Embed a map code paste করতে পারো। Save করার সময় iframe-এর src নিজে থেকে বের করে নেওয়া হবে।</small>
+              </label>
+              <label>Map Zoom
+                <input type="number" min={1} max={21} value={settings.site.map_zoom} onChange={(e) => updateGroup("site", { map_zoom: Number(e.target.value) || 15 })} />
+              </label>
+            </div>
+            <div className="admin-form-actions">
+              <button className="admin-primary-button" type="button" disabled={!isSuperAdmin || saving === "location"} onClick={() => saveGroup("save-location", { map_query: settings.site.map_query, map_embed_url: settings.site.map_embed_url, address: settings.site.address, map_zoom: settings.site.map_zoom }, "location")}>
+                {saving === "location" ? "সংরক্ষণ হচ্ছে..." : "Location Save করুন"}
               </button>
             </div>
           </div>

@@ -1,0 +1,23 @@
+STEP 14 — CONTACT, CALL & SOCIAL SETTINGS
+
+1. Database migration লাগবে না। Existing site_settings table ব্যবহার করা হয়েছে।
+
+2. Admin Dashboard → Settings → Contact & Social:
+   - Mail recipient / Gmail পরিবর্তন করুন।
+   - Call Us phone number পরিবর্তন করুন।
+   - Facebook / YouTube / Instagram URL add/edit করুন।
+   - Delete করতে URL খালি করে Save করুন।
+
+3. Website:
+   - Header-এর Call button নতুন phone number ব্যবহার করবে।
+   - Contact section-এর form /api/contact.php-এ submit হবে।
+   - Mail recipient হিসেবে Settings-এর contact email ব্যবহার হবে।
+   - Footer social links Settings থেকে live update হবে।
+   - Bottom-right floating button এখন Call button; click করলে tel: call হবে।
+
+4. Email delivery:
+   PHP mail() ব্যবহার করা হয়েছে। cPanel hosting-এ server mail/DNS configuration ঠিক থাকতে হবে।
+   Local XAMPP-এ mail() সাধারণত SMTP configuration ছাড়া সরাসরি Gmail-এ পাঠায় না।
+
+5. Admin dashboard:
+   Notification bell এখন Admin profile-এর ঠিক পাশে থাকবে। Floating notification alert আগের মতো dashboard-এর bottom-right-এ থাকবে।

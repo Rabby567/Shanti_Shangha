@@ -46,17 +46,20 @@ export function Header({
           </span>
         </button>
 
-        <nav className="desktop-nav" aria-label="প্রধান নেভিগেশন">
-          {navigation.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => onNavigate(item.id)}
-            >
-              {item.label}
-            </button>
-          ))}
-        </nav>
+        <div className="header-actions">
+          <nav className="desktop-nav" aria-label="প্রধান নেভিগেশন">
+            {navigation.map((item) => (
+              <button key={item.id} type="button" onClick={() => onNavigate(item.id)}>
+                {item.label}
+              </button>
+            ))}
+          </nav>
+          {siteSettings?.contact_phone && (
+            <a className="header-call-button" href={`tel:${siteSettings.contact_phone}`}>
+              ☎ <span>কল করুন</span>
+            </a>
+          )}
+        </div>
 
         <button
           className="menu-btn"
@@ -80,6 +83,7 @@ export function Header({
               {item.label}
             </button>
           ))}
+          {siteSettings?.contact_phone && <a className="mobile-call-button" href={`tel:${siteSettings.contact_phone}`}>☎ কল করুন</a>}
         </nav>
       )}
     </header>

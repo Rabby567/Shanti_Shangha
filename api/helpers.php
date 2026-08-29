@@ -182,3 +182,44 @@ function delete_uploaded_file(?string $relativePath): void
         @unlink($fullPath);
     }
 }
+
+/** Create an in-dashboard notification for all active admins. */
+function create_notification(PDO $pdo, string $type, string $title, string $message, ?string $entityType = null, ?int $entityId = null): void
+{
+    try {
+        $statement = $pdo->prepare(
+            'INSERT INTO notifications (type, title, message, entity_type, entity_id)
+             VALUES (:type, :title, :message, :entity_type, :entity_id)'
+        );
+        $statement->execute([
+            'type' => $type,
+            'title' => $title,
+            'message' => $message,
+            'entity_type' => $entityType,
+            'entity_id' => $entityId,
+        ]);
+    } catch (Throwable $e) {
+        // Notifications are supplemental; a missing/unavailable notification table must not break public forms.
+    }
+}
+
+/** Record a meaningful admin action in the audit trail. */
+function log_admin_activity(PDO $pdo, string $module, string $action, string $description, ?int $entityId = null): void
+{
+    if (empty($_SESSION['admin_id'])) return;
+    try {
+        $statement = $pdo->prepare(
+            'INSERT INTO admin_activity_logs (admin_id, module, action, description, entity_id)
+             VALUES (:admin_id, :module, :action, :description, :entity_id)'
+        );
+        $statement->execute([
+            'admin_id' => (int) $_SESSION['admin_id'],
+            'module' => $module,
+            'action' => $action,
+            'description' => $description,
+            'entity_id' => $entityId,
+        ]);
+    } catch (Throwable $e) {
+        // Audit failure must never break the primary admin operation.
+    }
+}

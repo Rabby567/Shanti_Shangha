@@ -1,0 +1,15 @@
+STEP 13 — Notifications, Admin Activity, Social Links
+
+1. Upload the updated project files.
+2. In phpMyAdmin select the Shanti Sangha database.
+3. Import: database/step13_notifications_activity.sql
+4. Verify these tables exist:
+   - notifications
+   - notification_reads
+   - admin_activity_logs
+5. In Admin Dashboard > Settings > Website, add Facebook, YouTube and Instagram URLs.
+6. In Admin Dashboard > Settings > Notifications, enable/disable notification types as required.
+7. Super Admin > Admin Management can add, remove, activate/deactivate and change admin roles.
+8. Dashboard top-right bell and bottom-right floating bell show unread notifications.
+9. Dashboard > Activity shows the admin audit trail.
+10. Website header has a Call button when Contact Phone is configured. The Contact section provides mail/call actions.

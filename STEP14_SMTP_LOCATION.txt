@@ -1,0 +1,14 @@
+STEP 14 — Gmail SMTP + Location Map
+
+1. Import database/step14_smtp_location.sql in phpMyAdmin.
+2. Admin Dashboard → Settings → Contact & Social → Gmail SMTP.
+3. Turn Gmail SMTP ON.
+4. Enter the Gmail account that will send mail and its Google App Password.
+5. Keep SMTP Host smtp.gmail.com, Port 587, Encryption TLS.
+6. The Contact Email/recipient can be a different Gmail address.
+7. Admin Dashboard → Settings → Location Map → enter the location/address and save.
+8. The footer will show the Google map on the right side.
+
+IMPORTANT: Use a Google App Password, not your normal Gmail password. App Passwords require 2-Step Verification on the Google account.
+
+If you change the SMTP Gmail account, enter a new App Password for that account. The Contact Email recipient can remain different.

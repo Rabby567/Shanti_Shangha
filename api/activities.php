@@ -383,6 +383,10 @@ try {
         ]);
 
         $activityId = (int) $pdo->lastInsertId();
+        log_admin_activity($pdo, 'Activities', 'create', 'নতুন কার্যক্রম “' . $title . '” যোগ করা হয়েছে।', $activityId);
+        if (!empty($payload['is_published']) && get_site_setting('notify_activity', '1') === '1') {
+            create_notification($pdo, 'activity', 'নতুন কার্যক্রম প্রকাশ', '“' . $title . '” কার্যক্রমটি প্রকাশ করা হয়েছে।', 'activity', $activityId);
+        }
         save_activity_images($pdo, $activityId, (array) ($payload['photos'] ?? []));
         save_activity_videos($pdo, $activityId, (array) ($payload['videos'] ?? []));
 
@@ -445,6 +449,7 @@ try {
             'sort_order' => (int) ($payload['sort_order'] ?? 0),
         ]);
 
+        log_admin_activity($pdo, 'Activities', 'update', 'কার্যক্রম “' . $title . '” আপডেট করা হয়েছে।', $id);
         save_activity_images($pdo, $id, (array) ($payload['photos'] ?? []));
         save_activity_videos($pdo, $id, (array) ($payload['videos'] ?? []));
 
@@ -468,6 +473,7 @@ try {
 
         $statement = $pdo->prepare('DELETE FROM activities WHERE id = :id');
         $statement->execute(['id' => $id]);
+        log_admin_activity($pdo, 'Activities', 'delete', 'কার্যক্রম মুছে ফেলা হয়েছে।', $id);
 
         if ($statement->rowCount() === 0) {
             send_json(['success' => false, 'message' => 'কার্যক্রমটি পাওয়া যায়নি।'], 404);
