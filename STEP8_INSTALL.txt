@@ -1,0 +1,21 @@
+SHANTI SANGHA — STEP 8
+
+1. Replace your current project with this ZIP.
+2. Keep your existing api/config.php if its database settings are correct.
+3. In phpMyAdmin, select shanti_sangha and import database/step8_migration.sql once.
+4. Make sure XAMPP Apache + MySQL are running.
+5. In the project folder run:
+   npm install
+   npm run dev
+6. Open http://localhost:5173/ and admin at http://localhost:5173/#/admin
+
+Step 8 modules now connected:
+- Gallery: upload/path, publish, edit, delete
+- About: accordion section CRUD
+- Blood Requests: live list, status, delete
+- Blood Donors: approval, availability, delete
+- Member Applications: details, approve/reject, delete
+- Public member/blood forms save to MySQL
+- Gallery uploads go to uploads/gallery/
+
+NOTE: npm build was not run in the build environment because the npm registry package cache was unavailable. All PHP API files pass php -l syntax validation.

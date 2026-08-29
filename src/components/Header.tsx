@@ -1,10 +1,13 @@
 import { navigation } from "../data";
 import type { SectionId } from "../types";
+import type { SiteSettings } from "../siteSettings";
+import { mediaUrl } from "../media";
 
 interface HeaderProps {
   mobileMenuOpen: boolean;
   onMenuToggle: () => void;
   onNavigate: (sectionId: SectionId) => void;
+  siteSettings?: SiteSettings;
 }
 
 /**
@@ -14,8 +17,10 @@ export function Header({
   mobileMenuOpen,
   onMenuToggle,
   onNavigate,
+  siteSettings,
 }: HeaderProps) {
   const goHome = () => {
+    window.location.hash = "";
     window.scrollTo({ top: 0, behavior: "smooth" });
 
     // Only close the mobile menu if it is currently open.
@@ -31,13 +36,13 @@ export function Header({
           {/* Official organization logo supplied for the website header. */}
           <img
             className="brand-logo"
-            src="/images/logo.svg"
-            alt="শান্তি সংঘ"
+            src={mediaUrl(siteSettings?.logo_path || "/images/logo.svg")}
+            alt={siteSettings?.name || "শান্তি সংঘ"}
           />
 
           <span className="brand-text">
-            <strong>শান্তি সংঘ</strong>
-            <small>যুব সমাজ কল্যাণ পরিষদ</small>
+            <strong>{siteSettings?.name || "শান্তি সংঘ"}</strong>
+            <small>{siteSettings?.tagline || "যুব সমাজ কল্যাণ পরিষদ"}</small>
           </span>
         </button>
 

@@ -1,61 +1,69 @@
-import { activities } from "../data";
+import { useEffect, useState } from "react";
+import { activities as fallbackActivities } from "../data";
+import { getPublicActivities } from "../activities";
+import type { Activity } from "../types";
+import { mediaUrl } from "../media";
 
-/**
- * Activity cards section.
- */
-export function Activities() {
+interface ActivitiesProps {
+  onOpenActivities: () => void;
+}
+
+export function Activities({ onOpenActivities }: ActivitiesProps) {
+  const [activities, setActivities] = useState<Activity[]>(fallbackActivities);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    getPublicActivities()
+      .then((items) => {
+        if (!cancelled && items.length > 0) setActivities(items);
+      })
+      .catch(() => {
+        // Keep the local demo content if the API is unavailable.
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <section id="activities" className="activities section-anchor">
       <div className="container">
         <div className="section-heading centered">
           <div className="section-kicker">আমাদের কার্যক্রম</div>
-          <h2>আমরা যেভাবে মানুষের পাশে থাকি</h2>
-          <p>
-            আমাদের বিভিন্ন সামাজিক ও মানবিক কার্যক্রমের কিছু অংশ নিচে তুলে
-            ধরা হলো।
-          </p>
+          <h2>যে কাজগুলো আমাদের পথচলাকে এগিয়ে নেয়</h2>
+          <p>মানুষের কল্যাণ ও সামাজিক সচেতনতার জন্য আমাদের বিভিন্ন উদ্যোগ।</p>
         </div>
 
         <div className="activity-grid">
-          {activities.map((activity) => (
-            <article className="activity-card" key={activity.number}>
+          {activities.slice(0, 3).map((activity) => (
+            <article className="activity-card" key={activity.id ?? activity.number}>
               <div className="activity-image">
-                <img src={activity.image} alt={activity.title} />
+                <img src={mediaUrl(activity.image)} alt={activity.title} />
                 <span>{activity.number}</span>
               </div>
-
               <div className="activity-body">
-                <div className="activity-icon" aria-hidden="true">
-                  {activity.icon}
-                </div>
-
+                <div className="activity-icon" aria-hidden="true">{activity.icon}</div>
                 <h3>{activity.title}</h3>
-                <p>
-                  {activity.description}{" "}
-                  <button
-                    className="read-more-inline"
-                    type="button"
-                    onClick={() =>
-                      (window.location.hash = `/activity/${encodeURIComponent(
-                        activity.number,
-                      )}`)
-                    }
-                  >
-                    আরও পড়ুন
-                  </button>
-                </p>
+                <p>{activity.description}</p>
+                <button
+                  className="read-more"
+                  type="button"
+                  onClick={() => {
+                    const key = activity.id ? String(activity.id) : activity.number;
+                    window.location.hash = `/activity/${encodeURIComponent(key)}`;
+                  }}
+                >
+                  আরও পড়ুন <span aria-hidden="true">→</span>
+                </button>
               </div>
             </article>
           ))}
         </div>
 
-        {/* The home page stays compact; the archive contains every activity. */}
         <div className="activities-more">
-          <button
-            className="btn primary"
-            type="button"
-            onClick={() => (window.location.hash = "/activities")}
-          >
+          <button className="btn primary" type="button" onClick={onOpenActivities}>
             আরও দেখুন <span aria-hidden="true">→</span>
           </button>
         </div>

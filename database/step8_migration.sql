@@ -1,0 +1,6 @@
+USE shanti_sangha;
+SET @db := DATABASE();
+SET @sql := IF(EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA=@db AND TABLE_NAME='membership_applications' AND COLUMN_NAME='father_name'),'SELECT 1','ALTER TABLE membership_applications ADD COLUMN father_name VARCHAR(160) NULL AFTER address'); PREPARE stmt FROM @sql; EXECUTE stmt; DEALLOCATE PREPARE stmt;
+SET @sql := IF(EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA=@db AND TABLE_NAME='membership_applications' AND COLUMN_NAME='mother_name'),'SELECT 1','ALTER TABLE membership_applications ADD COLUMN mother_name VARCHAR(160) NULL AFTER father_name'); PREPARE stmt FROM @sql; EXECUTE stmt; DEALLOCATE PREPARE stmt;
+SET @sql := IF(EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA=@db AND TABLE_NAME='membership_applications' AND COLUMN_NAME='profession'),'SELECT 1','ALTER TABLE membership_applications ADD COLUMN profession VARCHAR(160) NULL AFTER mother_name'); PREPARE stmt FROM @sql; EXECUTE stmt; DEALLOCATE PREPARE stmt;
+SET @sql := IF(EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA=@db AND TABLE_NAME='membership_applications' AND COLUMN_NAME='blood_group'),'SELECT 1','ALTER TABLE membership_applications ADD COLUMN blood_group VARCHAR(5) NULL AFTER profession'); PREPARE stmt FROM @sql; EXECUTE stmt; DEALLOCATE PREPARE stmt;

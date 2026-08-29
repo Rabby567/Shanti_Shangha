@@ -9,6 +9,7 @@ export const navigation: NavItem[] = [
   { id: "gallery", label: "গ্যালারি" },
   { id: "member", label: "সদস্য হোন" },
   { id: "blood", label: "রক্ত সেবা" },
+  { id: "donation", label: "অনুদান" },
 ];
 
 /**

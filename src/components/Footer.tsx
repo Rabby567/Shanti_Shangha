@@ -1,8 +1,11 @@
 import { navigation } from "../data";
 import type { SectionId } from "../types";
+import type { SiteSettings } from "../siteSettings";
+import { mediaUrl } from "../media";
 
 interface FooterProps {
   onNavigate: (sectionId: SectionId) => void;
+  siteSettings?: SiteSettings;
 }
 
 /**
@@ -11,24 +14,32 @@ interface FooterProps {
  * Keeps the footer branding, navigation actions, and copyright notice
  * in one small, reusable component.
  */
-export function Footer({ onNavigate }: FooterProps) {
+export function Footer({ onNavigate, siteSettings }: FooterProps) {
   return (
     <footer className="footer">
       <div className="container footer-grid">
         {/* Organization branding */}
         <div className="footer-brand">
-          <div className="footer-logo">
+          <button
+            className="footer-logo footer-logo-button"
+            type="button"
+            onClick={() => {
+              window.location.hash = "";
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+            aria-label="হোমে যান"
+          >
             <img
-              src="/images/logo.svg"
-              alt="শান্তি সংঘ"
+              src={mediaUrl(siteSettings?.logo_path || "/images/logo.svg")}
+              alt={siteSettings?.name || "শান্তি সংঘ"}
               className="footer-logo-image"
             />
 
             <div className="footer-brand-text">
-              <strong>শান্তি সংঘ</strong>
-              <small>যুব সমাজ কল্যাণ পরিষদ</small>
+              <strong>{siteSettings?.name || "শান্তি সংঘ"}</strong>
+              <small>{siteSettings?.tagline || "যুব সমাজ কল্যাণ পরিষদ"}</small>
             </div>
-          </div>
+          </button>
 
           <p>“এসো শান্তি সংঘ করি, মানবতার সেবা করি”</p>
         </div>
@@ -73,7 +84,7 @@ export function Footer({ onNavigate }: FooterProps) {
 
       {/* Copyright */}
       <div className="footer-bottom">
-        © 2026 শান্তি সংঘ যুব সমাজ কল্যাণ পরিষদ — সর্বস্বত্ব সংরক্ষিত।
+        © 2026 {siteSettings?.name || "শান্তি সংঘ"} {siteSettings?.tagline || "যুব সমাজ কল্যাণ পরিষদ"} — সর্বস্বত্ব সংরক্ষিত।
       </div>
     </footer>
   );

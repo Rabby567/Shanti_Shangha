@@ -1,0 +1,37 @@
+SHANTI SANGHA — FULL PROJECT
+
+Project root:
+C:\xampp\htdocs\shanti-sangha
+
+1. Make sure XAMPP Apache and MySQL are running.
+2. Database:
+   - Open phpMyAdmin.
+   - Select/import database/schema.sql.
+3. Backend config:
+   - api/config.php is already configured for local XAMPP:
+     host=127.0.0.1
+     database=shanti_sangha
+     user=root
+     password=(blank)
+4. Frontend:
+   Open PowerShell in the project root and run:
+
+   npm install
+   npm run dev
+
+5. Open:
+   http://localhost:5173
+
+6. Admin:
+   http://localhost:5173/#/admin
+
+7. Current local admin credentials created during setup:
+   Email: admin@shantishangha.org
+   Password: ShantiAdmin@2026
+
+IMPORTANT:
+- Do not publish api/config.php with production credentials.
+- Change the admin password before production use.
+- Delete api/create-admin.php from the production server after creating the first admin.
+
+The project contains the current Activities Management + Homepage Management + MySQL dashboard foundation.

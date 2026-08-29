@@ -1,0 +1,36 @@
+SHANTI SANGHA — STEP 9
+
+Admin Profile + Multiple Admin Management
+
+1. Keep the existing api/config.php if your XAMPP database settings are correct.
+2. Open phpMyAdmin.
+3. Select the `shanti_sangha` database.
+4. Import:
+   database/step9_admin_management.sql
+5. Make sure XAMPP Apache + MySQL are running.
+6. In the project folder run:
+   npm install
+   npm run dev
+7. Open:
+   http://localhost:5173/
+   Admin: http://localhost:5173/#/admin
+
+New features:
+- Multiple admin accounts.
+- Super Admin can create, edit, activate/deactivate and delete other admins.
+- Admin and Super Admin roles.
+- Every admin has name, email, phone number and profile image.
+- Admin can update own profile.
+- Admin can upload/remove JPG, PNG or WEBP profile image (max 3MB).
+- Admin can change own password.
+- Current admin image/name/role appear in the dashboard header.
+- Last active Super Admin cannot be deleted or demoted.
+- An admin cannot delete or deactivate their own account.
+- Admin profile images are stored in uploads/admins/.
+
+Important:
+- Existing admin password remains unchanged.
+- After importing the migration, log in with your existing admin account.
+- The existing first admin becomes the Super Admin only if its database role is already `super_admin`. If it is `admin`, change it once in phpMyAdmin:
+  UPDATE admins SET role = 'super_admin' WHERE email = 'admin@shantishangha.org';
+- Change production passwords and keep api/config.php private.

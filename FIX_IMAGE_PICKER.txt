@@ -1,0 +1,26 @@
+Shanti Sangha - Activity Image Picker + Media URL Fix
+
+Changes included:
+1. Fixed uploaded /uploads/* image URLs when React runs on Vite (localhost:5173).
+2. Added a reusable Activity Image Picker.
+3. Activity Cover Image now has two choices:
+   - Gallery থেকে: existing database gallery images
+   - Device থেকে Upload: upload a new image to uploads/activities/
+4. Added admin-only PHP endpoint: /api/activities.php?action=upload-image
+5. Updated Gallery, Activities, Hero, Header, Footer, Admin profile and Settings asset previews to resolve upload paths correctly.
+6. Added uploads/activities/.htaccess.
+7. Simplified uploads .htaccess files to avoid common XAMPP Apache 500 errors caused by unsupported/overly restrictive directives.
+
+Local run:
+  cd C:\xampp\htdocs\shanti-sangha
+  npm install
+  npm run dev
+
+Then open:
+  http://localhost:5173/#/admin
+
+Important:
+PHP/XAMPP Apache must be running. The PHP project must be available at:
+  http://localhost/shanti-sangha
+
+No database migration is required for this image-picker change.

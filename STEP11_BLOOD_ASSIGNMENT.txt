@@ -1,0 +1,12 @@
+STEP 11 - Blood request donor assignment
+
+The API also auto-creates the new schema pieces if they are missing.
+For an existing database, database/step11_blood_donor_assignment.sql can be run once.
+
+- Pending requests can select one approved/available donor per required bag.
+- Donor details appear before selection; admin can call and confirm, then select or cancel.
+- A request cannot be marked fulfilled until exactly the required number of donors is selected.
+- On fulfillment, each selected donor gets today's last_donation_date and donation_count increases by 1.
+- Selected donors can be removed while the request is not fulfilled.
+- Donation count is editable from the donor list.
+- Availability continues to be derived from the four-month eligibility rule.

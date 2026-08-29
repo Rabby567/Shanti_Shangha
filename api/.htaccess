@@ -1,0 +1,7 @@
+# Prevent directory listing inside the API folder.
+Options -Indexes
+
+# Never allow direct browser access to local configuration files.
+<FilesMatch "^(config|db|helpers)\.php$">
+    Require all denied
+</FilesMatch>

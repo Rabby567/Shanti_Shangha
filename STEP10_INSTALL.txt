@@ -1,0 +1,33 @@
+Shanti Sangha - Step 10 Settings
+=================================
+
+This step adds:
+- Website Settings: name, tagline, logo, favicon, phone, email, address, Facebook URL, Active/Maintenance mode
+- Homepage Settings: hero title/subtitle/image and section visibility toggles
+- Security Settings: login protection, failed-login limit, session timeout, logout-all-sessions
+- System Status: database/API/PHP/MySQL/app/upload/GD status
+- Upload Settings: max image size, allowed formats, upload directory, optimization flag
+- Notification Settings: blood request, member application, activity, email master switch
+- Public website applies branding, maintenance mode and homepage visibility settings.
+- Homepage Management and Settings hero content stay synchronized.
+
+INSTALL:
+1. Keep the existing project backup.
+2. Replace/update the project files with this project.
+3. Start Apache + MySQL in XAMPP.
+4. Open phpMyAdmin and select `shanti_sangha`.
+5. Import `database/step10_settings.sql`.
+6. Make sure `uploads/` is writable by PHP.
+7. In PowerShell:
+      npm install
+      npm run dev
+8. Open:
+      http://localhost:5173/#/admin
+9. Login as Super Admin and open Settings.
+
+IMPORTANT:
+- Website/Security/Upload/Notification configuration changes are restricted to Super Admin.
+- Normal Admin can manage their own profile and password.
+- Password change logs the current account out for security.
+- "Logout all sessions" invalidates every active session for the current admin account.
+- Maintenance mode blocks the public website but does not block /#/admin.
